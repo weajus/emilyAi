@@ -1,6 +1,8 @@
 import discord
 import random
 from discord.ext import commands
+from bs4 import *
+import requests as rq
 
 client = commands.Bot(command_prefix="->")
 client.remove_command("help")
@@ -62,6 +64,53 @@ async def uwu(ctx):
     )
     author = ctx.author.mention
     await ctx.send(author, embed=embed)
+    
+    
+@client.command()
+async def test2(ctx, tag: str):
+    i = 0
+
+    def tags():
+        return tag
+
+    def photos():
+        tag = tags()
+
+
+        textatg = "https://konachan.com/post?tags="
+        textatg = textatg + tag
+        imagess = rq.get(textatg)
+        sopa = BeautifulSoup(imagess.text, "html.parser")
+        links = []
+        image5 = sopa.select('a[href^="https://konachan.com/jpeg"]')
+
+        for img in image5:
+            links.append(img['href'])
+
+        values2 = random.choice(links)
+        return values2
+
+
+
+
+
+    while i < 3:
+        embed = discord.Embed(
+            title="Toma tu chica 7u7",
+            colour=discord.Colour.red()
+        )
+        values = photos()
+        embed.set_image(url=values)
+
+        await ctx.send(embed=embed)
+
+        i += 1
+
+
+
+    
+    
+    
 
 
 @client.command(pass_context=True)
@@ -77,6 +126,15 @@ async def help(ctx):
     embed.add_field(name="->animegirl", value="Imagenes de anime especialmente chicas", inline=False)
     embed.add_field(name="->lolis", value="FBI, OPEN UP", inline=False)
     await ctx.send(author, embed=embed)
+
+    
+    
+    
+@client.event
+async def on_ready():
+    await client.change_presence(activity=discord.Game(name="uwu", url="https://thumbs.gfycat.com/ConcreteVibrantDalmatian-size_restricted.gif") )
+
+
 
 
 client.run('token')
