@@ -14,19 +14,28 @@ async def animegirl(ctx):
             title="Toma tu chica 7u7",
             colour=discord.Colour.red()
         )
-        uwuse = ["https://i.pinimg.com/originals/9a/ad/d1/9aadd10855fffd866c97619af3acfa2c.jpg",
-                 "https://data.whicdn.com/images/174142895/original.jpg",
-                 "https://www.androidred.com/wp-content/uploads/2018/12/anime-girl-purple-hair.jpg",
-                 "https://www.ultrahdwallpaper.in/uploads/cache/544981391/Cute-Anime-Girl-Wallpaper-HD-1300x0-MM-100.jpg",
-                 "https://i.ytimg.com/vi/A1fkIvmbD_4/maxresdefault.jpg",
-                 "https://data.whicdn.com/images/321030626/large.jpg", "https://wallpaperaccess.com/full/2061.png",
-                 "https://wallpaperaccess.com/full/24545.jpg"]
-        values = random.choice(uwuse)
+        
+        values = lolisi()
         embed.set_image(url=values)
 
         await ctx.send(embed=embed)
 
         i += 1
+
+
+        
+
+def lolisi():
+    uwuse = ["https://i.pinimg.com/originals/9a/ad/d1/9aadd10855fffd866c97619af3acfa2c.jpg",
+             "https://data.whicdn.com/images/174142895/original.jpg",
+             "https://www.androidred.com/wp-content/uploads/2018/12/anime-girl-purple-hair.jpg",
+             "https://www.ultrahdwallpaper.in/uploads/cache/544981391/Cute-Anime-Girl-Wallpaper-HD-1300x0-MM-100.jpg",
+             "https://i.ytimg.com/vi/A1fkIvmbD_4/maxresdefault.jpg",
+             "https://data.whicdn.com/images/321030626/large.jpg", "https://wallpaperaccess.com/full/2061.png",
+             "https://wallpaperaccess.com/full/24545.jpg"]
+    values = random.choice(uwuse)
+    return values
+
 
 
 @client.command()
