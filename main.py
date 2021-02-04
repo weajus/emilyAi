@@ -3,6 +3,8 @@ import random
 from discord.ext import commands
 from bs4 import *
 import requests as rq
+from hentai import Hentai, Format
+from hentai import Utils, Sort, Option, Tag
 
 client = commands.Bot(command_prefix="->")
 client.remove_command("help")
@@ -16,7 +18,6 @@ async def animegirl(ctx):
             title="Toma tu chica 7u7",
             colour=discord.Colour.red()
         )
-        
         values = lolisi()
         embed.set_image(url=values)
 
@@ -24,8 +25,6 @@ async def animegirl(ctx):
 
         i += 1
 
-
-        
 
 def lolisi():
     uwuse = ["https://i.pinimg.com/originals/9a/ad/d1/9aadd10855fffd866c97619af3acfa2c.jpg",
@@ -35,9 +34,8 @@ def lolisi():
              "https://i.ytimg.com/vi/A1fkIvmbD_4/maxresdefault.jpg",
              "https://data.whicdn.com/images/321030626/large.jpg", "https://wallpaperaccess.com/full/2061.png",
              "https://wallpaperaccess.com/full/24545.jpg"]
-    values = random.choice(uwuse)
+    values = random.sample(uwuse, k=1)
     return values
-
 
 
 @client.command()
@@ -62,12 +60,14 @@ async def uwu(ctx):
         title=value,
         colour=discord.Colour.red()
     )
+    values = lolisi()
+    embed.set_image(url=values)
     author = ctx.author.mention
     await ctx.send(author, embed=embed)
-    
-    
+
+
 @client.command()
-async def test2(ctx, tag: str):
+async def konachan(ctx, tag: str):
     i = 0
 
     def tags():
@@ -75,7 +75,6 @@ async def test2(ctx, tag: str):
 
     def photos():
         tag = tags()
-
 
         textatg = "https://konachan.com/post?tags="
         textatg = textatg + tag
@@ -90,10 +89,6 @@ async def test2(ctx, tag: str):
         values2 = random.choice(links)
         return values2
 
-
-
-
-
     while i < 3:
         embed = discord.Embed(
             title="Toma tu chica 7u7",
@@ -107,10 +102,89 @@ async def test2(ctx, tag: str):
         i += 1
 
 
+@client.group(name="nhentai")
+async def nhentai(ctx):
+    pass
 
-    
-    
-    
+
+@nhentai.command(name="tags")
+async def tags_subcommand(ctx, tags: str):
+    def photos():
+
+        popo = "tag:" + tags
+        links = []
+
+        for doujin in Utils.search_all_by_query(query=popo, sort=Sort.PopularWeek):
+            links.append(doujin.id)
+
+
+        links2 = random.choice(links)
+
+
+        return links2
+
+    doujin2 = Hentai(photos())
+    pog1 = doujin2.title(Format.Pretty)
+    pog2 = photos()
+    pog3 = [tag.name for tag in doujin2.tag]
+
+    embed2 = discord.Embed(
+        title=pog1,
+
+
+        colour=discord.Colour.red()
+    )
+    embed2.add_field(name="id", value=pog2, inline=False)
+    embed2.add_field(name="tags", value=", ".join(pog3), inline=False)
+    await ctx.send(embed=embed2)
+
+
+
+    doujin3 = doujin2.image_urls
+
+    for x in doujin3:
+        embed = discord.Embed(
+            colour=discord.Colour.red()
+        )
+
+
+
+        embed.set_image(url=x)
+
+        await ctx.send(embed=embed)
+
+
+
+@nhentai.command(name="id")
+async def id_subcommand(ctx, number: int):
+
+
+
+    links2 = Hentai(number)
+    pog1 = links2.title(Format.Pretty)
+    pog3 = [tag.name for tag in links2.tag]
+
+    embed2 = discord.Embed(
+        title=pog1,
+
+
+        colour=discord.Colour.red()
+    )
+    embed2.add_field(name="id", value=number.__str__(), inline=False)
+    embed2.add_field(name="tags", value=", ".join(pog3), inline=False)
+    await ctx.send(embed=embed2)
+
+    doujin4 = links2.image_urls
+
+
+    for x in doujin4:
+        embed = discord.Embed(
+            colour=discord.Colour.red()
+        )
+
+        embed.set_image(url=x)
+
+        await ctx.send(embed=embed)
 
 
 @client.command(pass_context=True)
@@ -125,14 +199,14 @@ async def help(ctx):
     embed.add_field(name="->uwu", value="Responde cosas lindas", inline=False)
     embed.add_field(name="->animegirl", value="Imagenes de anime especialmente chicas", inline=False)
     embed.add_field(name="->lolis", value="FBI, OPEN UP", inline=False)
+    embed.add_field(name="->Konachan", value="Photos 7u7", inline=False)
     await ctx.send(author, embed=embed)
 
-    
-    
-    
+
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Game(name="uwu", url="https://thumbs.gfycat.com/ConcreteVibrantDalmatian-size_restricted.gif") )
+    await client.change_presence(
+        activity=discord.Game(name="uwu", url="https://thumbs.gfycat.com/ConcreteVibrantDalmatian-size_restricted.gif"))
 
 
 
