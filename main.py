@@ -186,7 +186,10 @@ async def id_subcommand(ctx, number: int):
 
         embed.set_image(url=doujin4[cout])
 
-
+        seras=imageloli(doujin4,save,cout)
+        print(seras.doujin)
+        arrayofimages.append(seras)
+        
         save=await ctx.send(embed=embed)
         await save.add_reaction("💖")
 
