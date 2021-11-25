@@ -5,6 +5,7 @@ from bs4 import *
 import requests as rq
 from hentai import Hentai, Format
 from hentai import Utils, Sort, Option, Tag
+from test import *
 
 client = commands.Bot(command_prefix="->")
 client.remove_command("help")
@@ -107,85 +108,120 @@ async def nhentai(ctx):
     pass
 
 
+arrayofimages=[]
+x=0
+cout=0
+listofcout=[]
 @nhentai.command(name="tags")
-async def tags_subcommand(ctx, tags: str):
-    def photos():
+async def tags_subcommand(ctx, tags: str, pages: int):
+    global x,arrayofimages
 
-        popo = "tag:" + tags
-        links = []
+    veryfy=ctx.channel.is_nsfw()
+    a=serach(tags, pages)
 
-        for doujin in Utils.search_all_by_query(query=popo, sort=Sort.PopularWeek):
-            links.append(doujin.id)
-
-
-        links2 = random.choice(links)
-
-
-        return links2
-
-    doujin2 = Hentai(photos())
+    doujin2 = Hentai(a.photos())
     pog1 = doujin2.title(Format.Pretty)
-    pog2 = photos()
+    pog2 = a.photos()
     pog3 = [tag.name for tag in doujin2.tag]
-
-    embed2 = discord.Embed(
-        title=pog1,
-
-
-        colour=discord.Colour.red()
-    )
-    embed2.add_field(name="id", value=pog2, inline=False)
-    embed2.add_field(name="tags", value=", ".join(pog3), inline=False)
-    await ctx.send(embed=embed2)
+    if veryfy==True:
+        embed2 = discord.Embed(
+            title=pog1,
 
 
+            colour=discord.Colour.red()
+        )
+        embed2.add_field(name="id", value=pog2, inline=False)
+        embed2.add_field(name="tags", value=", ".join(pog3), inline=False)
 
-    doujin3 = doujin2.image_urls
+        await ctx.send(embed=embed2)
 
-    for x in doujin3:
+
+
+
+    doujin4 = doujin2.image_urls
+
+    if veryfy == True:
+
         embed = discord.Embed(
             colour=discord.Colour.red()
         )
 
+        embed.set_image(url=doujin4[cout])
+
+        save = await ctx.send(embed=embed)
 
 
-        embed.set_image(url=x)
-
-        await ctx.send(embed=embed)
+        seras=imageloli(doujin4,save,cout)
+        print(seras.doujin)
+        arrayofimages.append(seras)
+        await save.add_reaction("💖")
 
 
 
 @nhentai.command(name="id")
 async def id_subcommand(ctx, number: int):
 
-
-
+    veryfy = ctx.channel.is_nsfw()
     links2 = Hentai(number)
     pog1 = links2.title(Format.Pretty)
     pog3 = [tag.name for tag in links2.tag]
+    if veryfy == True:
+        embed2 = discord.Embed(
+            title=pog1,
 
-    embed2 = discord.Embed(
-        title=pog1,
 
-
-        colour=discord.Colour.red()
-    )
-    embed2.add_field(name="id", value=number.__str__(), inline=False)
-    embed2.add_field(name="tags", value=", ".join(pog3), inline=False)
-    await ctx.send(embed=embed2)
+            colour=discord.Colour.red()
+        )
+        embed2.add_field(name="id", value=number.__str__(), inline=False)
+        embed2.add_field(name="tags", value=", ".join(pog3), inline=False)
+        await ctx.send(embed=embed2)
 
     doujin4 = links2.image_urls
 
+    if veryfy == True:
 
-    for x in doujin4:
         embed = discord.Embed(
             colour=discord.Colour.red()
-        )
+         )
 
-        embed.set_image(url=x)
+        embed.set_image(url=doujin4[cout])
 
-        await ctx.send(embed=embed)
 
+        save=await ctx.send(embed=embed)
+        await save.add_reaction("💖")
+
+
+@client.event
+async def on_reaction_add(reaction,user):
+  global cout,listofcout
+
+  if reaction.emoji == '💖':
+    embed = discord.Embed(
+    colour=discord.Colour.red())
+    print(arrayofimages)
+    test2=arrayofimages[x]
+    doujin=test2.doujin
+    cout=test2.cout
+    listofcout.append(cout)
+    a=listofcout[x]
+    b=a+1
+    save=test2.save
+    embed.set_image(url=doujin[a])
+    listofcout[x]=b
+
+
+    await save.edit(embed=embed)
+  else:
+    pass
+
+
+
+
+
+@nhentai.command(name="stop")
+async def stoppu(ctx):
+    global nosige
+    nosige=True
 
 @client.command(pass_context=True)
 async def help(ctx):
@@ -200,6 +236,7 @@ async def help(ctx):
     embed.add_field(name="->animegirl", value="Imagenes de anime especialmente chicas", inline=False)
     embed.add_field(name="->lolis", value="FBI, OPEN UP", inline=False)
     embed.add_field(name="->Konachan", value="Photos 7u7", inline=False)
+    embed.add_field(name="->nhentai", value="doujin funciona comando [tags o id] luego si elige tags puede [fetishes] [alguna pagina de popular, hay 20]", inline=False)
     await ctx.send(author, embed=embed)
 
 
@@ -207,8 +244,6 @@ async def help(ctx):
 async def on_ready():
     await client.change_presence(
         activity=discord.Game(name="uwu", url="https://thumbs.gfycat.com/ConcreteVibrantDalmatian-size_restricted.gif"))
-
-
 
 
 client.run('token')
