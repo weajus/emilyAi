@@ -35,7 +35,7 @@ def lolisi():
              "https://i.ytimg.com/vi/A1fkIvmbD_4/maxresdefault.jpg",
              "https://data.whicdn.com/images/321030626/large.jpg", "https://wallpaperaccess.com/full/2061.png",
              "https://wallpaperaccess.com/full/24545.jpg"]
-    values = random.sample(uwuse, k=1)
+    values = random.choice(uwuse)
     return values
 
 
@@ -244,6 +244,5 @@ async def help(ctx):
 async def on_ready():
     await client.change_presence(
         activity=discord.Game(name="uwu", url="https://thumbs.gfycat.com/ConcreteVibrantDalmatian-size_restricted.gif"))
-
 
 client.run('token')
