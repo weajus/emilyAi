@@ -155,11 +155,13 @@ async def tags_subcommand(ctx, tags: str, pages: int):
         print(seras.doujin)
         arrayofimages.append(seras)
         await save.add_reaction("💖")
+        x=x+1
 
 
 
 @nhentai.command(name="id")
 async def id_subcommand(ctx, number: int):
+    global x
 
     veryfy = ctx.channel.is_nsfw()
     links2 = Hentai(number)
@@ -176,6 +178,7 @@ async def id_subcommand(ctx, number: int):
         embed2.add_field(name="tags", value=", ".join(pog3), inline=False)
         await ctx.send(embed=embed2)
 
+
     doujin4 = links2.image_urls
 
     if veryfy == True:
@@ -186,36 +189,38 @@ async def id_subcommand(ctx, number: int):
 
         embed.set_image(url=doujin4[cout])
 
-        seras=imageloli(doujin4,save,cout)
-        print(seras.doujin)
-        arrayofimages.append(seras)
-        
+
         save=await ctx.send(embed=embed)
         await save.add_reaction("💖")
+        seras = imageloli(doujin4, save, cout)
+        print(seras.doujin)
+        arrayofimages.append(seras)
+        x = x + 1
+
 
 
 @client.event
 async def on_reaction_add(reaction,user):
-  global cout,listofcout
+    global cout,listofcout
 
-  if reaction.emoji == '💖':
-    embed = discord.Embed(
-    colour=discord.Colour.red())
-    print(arrayofimages)
-    test2=arrayofimages[x]
-    doujin=test2.doujin
-    cout=test2.cout
-    listofcout.append(cout)
-    a=listofcout[x]
-    b=a+1
-    save=test2.save
-    embed.set_image(url=doujin[a])
-    listofcout[x]=b
+    if reaction.emoji == '💖':
+        test2 = arrayofimages[x]
+        doujin = test2.doujin
+        cout = test2.cout
+        save = test2.save
+        embed = discord.Embed(
+        colour=discord.Colour.red())
+        print(arrayofimages)
+        listofcout.append(cout)
+        a=listofcout[x]
+        b=a+1
+        embed.set_image(url=doujin[a])
+        listofcout[x]=b
 
 
-    await save.edit(embed=embed)
-  else:
-    pass
+        await save.edit(embed=embed)
+    else:
+        pass
 
 
 
@@ -247,5 +252,4 @@ async def help(ctx):
 async def on_ready():
     await client.change_presence(
         activity=discord.Game(name="uwu", url="https://thumbs.gfycat.com/ConcreteVibrantDalmatian-size_restricted.gif"))
-
 client.run('token')
